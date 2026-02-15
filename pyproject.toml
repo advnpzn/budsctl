@@ -24,6 +24,7 @@ packages = ["budsctl"]
 
 [tool.hatch.build]
 include = [
+  "budsctl/**/*.py",
   "budsctl/plugins/*.yaml",
   "budsctl/schemas/*.json",
 ]
