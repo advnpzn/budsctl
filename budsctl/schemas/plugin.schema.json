@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://budsctl.dev/schemas/plugin-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "match", "transport", "features"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "match": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name_contains", "mac_prefix"],
+      "properties": {
+        "name_contains": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "mac_prefix": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "transport": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "channel"],
+          "properties": {
+            "type": {"const": "rfcomm"},
+            "channel": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "timeout_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "service_uuid", "write_char_uuid"],
+          "properties": {
+            "type": {"const": "ble"},
+            "service_uuid": {"type": "string", "minLength": 1},
+            "write_char_uuid": {"type": "string", "minLength": 1},
+            "notify_char_uuid": {"type": "string", "minLength": 1},
+            "write_with_response": {
+              "oneOf": [
+                {"type": "boolean"},
+                {"type": "string", "enum": ["true", "false", "True", "False"]}
+              ]
+            },
+            "timeout_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      ]
+    },
+    "features": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "values"],
+        "properties": {
+          "type": {"const": "enum"},
+          "values": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

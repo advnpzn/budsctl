@@ -1,0 +1,19 @@
+id: oneplus_buds4
+name: OnePlus Buds 4
+
+match:
+  name_contains: ["OnePlus Buds 4"]
+  mac_prefix: ["88:92:CC"]
+
+transport:
+  type: rfcomm
+  channel: 15
+
+features:
+  anc:
+    type: enum
+    values:
+      on: "aa0a00000404480300010102"
+      off: "aa0a000004044a0300010101"
+      adaptive: "aa0b000004044c040001010008"
+      transparency: "aa0a00000404500300010104"
