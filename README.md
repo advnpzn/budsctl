@@ -6,6 +6,8 @@ Developer docs: `docs/README.md`
 
 Reverse engineering guide for creating new device plugins: `docs/reverse-engineering.md`
 
+Changelog: `CHANGELOG.md`
+
 ## Status
 
 Milestone 1 implemented:
@@ -89,7 +91,3 @@ To verify Bluetooth API availability in the venv:
 ```bash
 uv run python -c "import socket; print(hasattr(socket, 'AF_BLUETOOTH'), hasattr(socket, 'BTPROTO_RFCOMM'))"
 ```
-
-## License
-
-MIT © advnpzn
