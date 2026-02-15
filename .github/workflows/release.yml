@@ -44,8 +44,49 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
+      - name: Extract release notes from CHANGELOG
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          VERSION="${TAG_NAME#v}"
+          OUT="RELEASE_NOTES.md"
+
+          awk -v version="$VERSION" '
+            BEGIN {
+              in_section = 0
+              found = 0
+            }
+            $0 ~ "^## \\[" version "\\]" {
+              in_section = 1
+              found = 1
+              next
+            }
+            in_section && $0 ~ "^## \\[" {
+              exit
+            }
+            in_section {
+              print
+            }
+            END {
+              if (!found) {
+                exit 2
+              }
+            }
+          ' CHANGELOG.md > "$OUT.tmp" || true
+
+          if [ -s "$OUT.tmp" ]; then
+            sed '/^[[:space:]]*$/N;/^\n$/D' "$OUT.tmp" > "$OUT"
+          else
+            echo "No matching changelog section found for $TAG_NAME." > "$OUT"
+          fi
+
+          rm -f "$OUT.tmp"
+
       - name: Attach distributions to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          body_path: RELEASE_NOTES.md
           files: dist/*
