@@ -8,14 +8,6 @@ Reverse engineering guide for creating new device plugins: `docs/reverse-enginee
 
 Changelog: `CHANGELOG.md`
 
-## Status
-
-Milestone 1 implemented:
-- `budsctl list`
-- `budsctl devices`
-- `budsctl features [--device ...] [--plugin ...]`
-- `budsctl set <feature> <value> [--device ...] [--plugin ...]`
-
 ## Requirements
 
 - Linux with BlueZ
